@@ -1,3 +1,4 @@
+import json
 import os
 import re
 import time
@@ -32,6 +33,7 @@ planilha = pd.read_excel('cpfs.xlsx')
 
 for index, row in planilha.iterrows():
     cpf = row['CPF']  # Pegar o CPF da linha atual
+
 
     def extrair_nome_municipio(endereco):
         # Lista de municípios
@@ -114,6 +116,7 @@ for index, row in planilha.iterrows():
 
         # Faça algo com o elemento, por exemplo, clique nele
         elemento.click()
+        time.sleep(2)    
         
         # Localize a lista suspensa usando o XPath fornecido (a <div> que representa o menu)
         dropdown_div = driver.find_element(By.XPATH, '//*[@id="oCMenu___GCC1008"]')
@@ -127,16 +130,27 @@ for index, row in planilha.iterrows():
         consultar = driver.find_element(By.XPATH, '//*[@id="formProdutorRural_cadastroProdutorRuralAction!pesquisarProdutorRural"]')
         
         consultar.click()
-        haProcesso = input("Aperte S se não houver cadastro:")
-        if haProcesso.lower() == 's':
-            # Atualize a coluna 'Processado' para marcar a linha como processada
+
+
+        time.sleep(1)
+        situacao = driver.find_element(By.XPATH, '//*[@id="tbProdutorRural"]/thead/tr/th[2]')
+        situacao.click()
+        time.sleep(2)
+        try:
+            abadeclaracao = WebDriverWait(driver, 10).until(
+                EC.presence_of_element_located((By.XPATH, '//*[@id="tbProdutorRural"]/tbody/tr[1]/td[8]/a[2]'))
+            )
+            abadeclaracao.click()
+            # Resto do seu código
+        except Exception as e:
+            print(f"Erro ao clicar em 'abadeclaracao' para o CPF {cpf}")
+                        # Atualize a coluna 'Processado' para marcar a linha como processada
             planilha.at[index, 'Não há processo'] = 'x'
             # Salve a planilha atualizada no mesmo arquivo Excel
             planilha.to_excel('cpfs.xlsx', index=False)
             break  # Saia do loop se o usuário não quiser continuar
 
-        abadeclaração = driver.find_element(By.XPATH, '//*[@id="tbProdutorRural"]/tbody/tr[1]/td[8]/a[2]')
-        abadeclaração.click()
+
         #################################################################################
         nome_element = driver.find_element(By.XPATH, '//*[@id="formProdutorRural_produtorRuralTOA_produtorRural_cceaPessoaFisica_pfNome"]')
         # Use JavaScript para obter o valor do atributo 'value' do elemento
