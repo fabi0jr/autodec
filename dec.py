@@ -18,10 +18,10 @@ import pandas as pd
 driver = webdriver.Chrome()
 
 #Realizar login no site
-driver.get('http://sistemas.sefaz.am.gov.br/gcc/entrada.do')  # Substitua pelo URL do site
-usuario = driver.find_element(By.ID, 'username')  # Substitua pelo campo de usuário
-senha = driver.find_element(By.ID, 'password')  # Substitua pelo campo de senha
-botao_login = driver.find_element(By.XPATH, '//*[@id="fm1"]/fieldset/div[3]/div/div[4]/input[4]')  # Substitua pelo botão de login
+driver.get('http://sistemas.sefaz.am.gov.br/gcc/entrada.do')  
+usuario = driver.find_element(By.ID, 'username')  
+senha = driver.find_element(By.ID, 'password') 
+botao_login = driver.find_element(By.XPATH, '//*[@id="fm1"]/fieldset/div[3]/div/div[4]/input[4]')  
 
 usuario.send_keys('03483401253')
 senha.send_keys('carteira23')
@@ -265,28 +265,23 @@ for index, row in planilha.iterrows():
 
         numcontrole_element = driver.find_element(By.XPATH, '//*[@id="formProdutorRural_produtorRuralTOA_produtorRural_nrDeclaracaoUnidLocal"]')
         numcontrole_da_pagina = driver.execute_script("return arguments[0]. value;", numcontrole_element)
-
-        ############################################################################
-    # Selecione o elemento usando o XPath
+    
         elemento = driver.find_element(By.XPATH,'//*[@id="oCMenu___GCC1006"]')
-
-        # Faça algo com o elemento, por exemplo, clique nele
         elemento.click()
         
-        # Localize a lista suspensa usando o XPath fornecido (a <div> que representa o menu)
         dropdown_div = driver.find_element(By.XPATH, '//*[@id="oCMenu___GCC1008"]')
-
-        # Clique na <div> para expandir o menu
         dropdown_div.click()
+        
         caixarg = driver.find_element(By.XPATH,'//*[@id="formCceaPessoaFisica_pessoaFisicaTOA_pessoaFisica_cpfFormatado"]')
         caixarg.click()
         caixarg.send_keys(cpf)
+        
         consultarrg = driver.find_element(By.XPATH,'//*[@id="formCceaPessoaFisica_pessoaFisica!pesquisarPessoaFisica"]')
         consultarrg.click()
+        
         opcaorg = driver.find_element(By.XPATH,'//*[@id="tbPessoaFisica"]/tbody/tr/td[6]')
         opcaorg.click()
-
-
+        
         rg_element = driver.find_element(By.XPATH, '//*[@id="formPessoaFisica_pessoaFisicaTOA_pessoaFisica_pfNumeroRg"]')
         rg_da_pagina = driver.execute_script("return arguments[0]. value;", rg_element)
 
@@ -299,11 +294,7 @@ for index, row in planilha.iterrows():
         
         if not numcontrole_da_pagina:
             numcontrole_da_pagina = "00"
-        # Use input() para obter o CPF do usuário
-
-        ##################################################################################
-
-
+            
         cpf = cpf_da_pagina
         rg = rg_da_pagina
         nome = nome_da_pagina
@@ -319,9 +310,7 @@ for index, row in planilha.iterrows():
         qnt2 = qnt2_da_pagina
         inicioatv = inicioatv_da_pagina
         numcontrole = numcontrole_da_pagina
-
-        # Crie um novo documento Word com base no modelo
-    # Verifique a presença de atividades secundárias (atv2) e latitude
+        
         if not atv2:
             if not latitude:
                 doc = Document(r"I:\ARQUIVO DIGITAL CPR\fabio jr\autodec\modelo_declaracao_semcoordesematv2.docx.docx")
@@ -332,8 +321,6 @@ for index, row in planilha.iterrows():
         else:
             doc = Document(r"I:\ARQUIVO DIGITAL CPR\fabio jr\autodec\modelo_declaracao_completo.docx.docx")
 
-
-        # Substitua as informações nas áreas específicas do documento
         for paragraph in doc.paragraphs:
             text = paragraph.text
             if '(municipio)' in text:
@@ -374,10 +361,10 @@ for index, row in planilha.iterrows():
             run = paragraph.add_run(text)
             run.font.size = Pt(12)  # Defina o tamanho da fonte conforme necessário
 
-        # Salve o documento com um nome específico
-        nome_do_arquivo = nome  # Solicitar um nome para o arquivo
-        nome_do_arquivo = nome_do_arquivo + ".docx"  # Adicione a extensão .docx
-        doc.save(nome_do_arquivo)  # Salve o documento com o nome fornecido
+
+        nome_do_arquivo = nome  
+        nome_do_arquivo = nome_do_arquivo + ".docx" 
+        doc.save(nome_do_arquivo)  
 
         break
 
