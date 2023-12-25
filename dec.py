@@ -23,7 +23,7 @@ usuario = driver.find_element(By.ID, 'username')
 senha = driver.find_element(By.ID, 'password') 
 botao_login = driver.find_element(By.XPATH, '//*[@id="fm1"]/fieldset/div[3]/div/div[4]/input[4]')  
 
-usuario.send_keys('03483401253')
+usuario.send_keys('********')
 senha.send_keys('carteira23')
 botao_login.click()
 
